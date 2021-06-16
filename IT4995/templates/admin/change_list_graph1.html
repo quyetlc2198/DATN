@@ -1,0 +1,217 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% block extrahead %}
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <style>
+     body{
+         background-color: #000;
+         font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+     }
+     h1{
+         font-size: 20px;
+         color: #fff;
+     }
+     td{
+         color: #FFFFFF;
+     }
+     hr{
+         border-top: none;
+     }
+     td, th {
+        font-size: 13px;
+        line-height: 16px;
+        border-bottom: 1px solid var(--hairline-color);
+        vertical-align: top;
+        padding: 8px;
+     }
+     select{
+         color: #fff;
+     }
+    </style>
+    <script>
+        var randomColorGenerator = function () {
+            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+        };
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'left'
+            },
+            title: {
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        window.onload = function () {
+            var ctx = document.getElementById("gender-chart");
+                {% regroup cl.queryset|dictsort:"status" by status as status_list %}
+                lineChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for status in status_list %}'{{ status.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for status in status_list %}'{{ status.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for status in status_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+            var ctx1 = document.getElementById("booking-chart");
+                {% regroup cl.queryset|dictsort:"room.name" by room as room_list %}
+                lineChart1 = new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for room in room_list %}'{{ room.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for room in room_list %}'{{ room.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for room in room_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+            var ctx2 = document.getElementById("category-chart");
+                {% regroup cl.queryset|dictsort:"room.category.name" by room.category as category_list %}
+                lineChart1 = new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for cate in category_list %}'{{ cate.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for cate in category_list %}'{{ cate.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for cate in category_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+                    {% regroup cl.queryset by arival_date.month as month_list %}
+                    var ctx3 = document.getElementById("month-chart");
+                    var arr = [0,0,0,0,0,0,0,0,0,0,0,0];
+                    var labels = [1,2,3,4,5,6,7,8,9,10,11,12];
+                    var background_color = [0,0,0,0,0,0,0,0,0,0,0,0];
+                    var border_color = [0,0,0,0,0,0,0,0,0,0,0,0];
+                    for(var i = 1 ; i < 13; i++){
+                        background_color[i-1] = randomColorGenerator();
+                        border_color[i-1] = randomColorGenerator();
+
+                    }
+                    {% for book in cl.queryset %}
+                            {% if book.arival_date.month == 1 %}
+                                arr[0]+=1
+                            {% elif book.arival_date.month == 2 %}
+                                arr[1] +=1
+                            {% elif book.arival_date.month == 3 %}
+                                arr[2] +=1
+                            {% elif book.arival_date.month == 4 %}
+                                arr[3] +=1
+                            {% elif book.arival_date.month == 5 %}
+                                arr[4] +=1
+                            {% elif book.arival_date.month == 6 %}
+                                arr[5] +=1
+                            {% elif book.arival_date.month == 7 %}
+                                arr[6] +=1
+                            {% elif book.arival_date.month == 8 %}
+                                arr[7] +=1
+                            {% elif book.arival_date.month == 9 %}
+                                arr[8] +=1
+                            {% elif book.arival_date.month == 10 %}
+                                arr[9] +=1
+                            {% elif book.arival_date.month == 11 %}
+                                arr[10] +=1
+                            {% elif book.arival_date.month == 12 %}
+                                arr[11] +=1
+                            {% endif %}
+                        {% endfor %}
+                lineChart1 = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: arr,
+                            backgroundColor: background_color,
+                            border_color:border_color,
+                            borderWidth: 1,
+                            label: 'Đơn đặt phòng'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true
+                          }
+                        }
+                      },
+                });
+
+
+            {#Tong doanh thu dat phong#}
+            var total = 0;
+                {% for book in cl.queryset %}
+                    {% ifequal book.status "CANCEL" %}
+                    {% else %}
+                        total+={{ book.Fee }}
+                    {% endifequal %}
+                {% endfor %}
+            document.getElementById("total").innerText =total + ' $';
+
+
+            {# Tong doanh thu #}
+            var total1 = 0;
+                {% for book in cl.queryset %}
+                    {% ifequal book.status "RETURNED" %}
+                        total1+={{ book.Fee }}
+                    {% endifequal %}
+                {% endfor %}
+            document.getElementById("total1").innerText =total1 + ' $';
+
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    <hr>
+    <div class="row">
+        <div class="col-md-4" style="border: 1px solid #417690;">
+            <canvas id="gender-chart" style="width: 90px !important; color: #fff; "></canvas>
+            <h5 style="text-align: center; color: #FFFFFF">Status Booking</h5>
+        </div>
+         <div class="col-md-4" style="border: 1px solid #417690">
+            <canvas id="booking-chart" style="width: 90px !important; color: #fff; "></canvas>
+             <h5 style="text-align: center; color: #FFFFFF">Room Booking</h5>
+        </div>
+        <div class="col-md-4" style="border: 1px solid #417690">
+                <canvas id="category-chart" style="width: 90px !important; color: #fff; "></canvas>
+                <h5 style="text-align: center; color: #FFFFFF">Category Booking</h5>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-5" style="border: 1px solid #417690">
+            <canvas id="month-chart" style="width: 90px !important; color: #fff; "></canvas>
+            <h5 style="text-align: center; color: #FFFFFF">Thống kê theo tháng</h5>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <div class="row" style="color: #FFFFFF; background-color: #417690; line-height:3; text-align: center; font-style: italic">
+                <div class="col-md-6">
+                    <b>Tổng doanh thu dự kiến </b>
+                </div>
+                <div class="col-md-6">
+                    <b>Tổng doanh thu </b>
+                </div>
+            </div>
+            <div class="row" style="color: #FFFFFF; background-color: #417690; line-height:3; text-align: center;">
+                <b><div class="col-md-6" id="total" style="text-transform: capitalize;"></div></b>
+                <b><div class="col-md-6" id="total1" style="text-transform: capitalize;"></div></b>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <hr style="margin-bottom: 40px">
+    {{ block.super }}
+{% endblock %}

@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} My Room List {% endblock %}
+{% block sub %} Room List {% endblock %}
+{% block body %}
+<h1 class="main_title_in">My Room List</h1>
+<div class="container add_bottom_60">
+
+    <div class="row">
+        <div class="col-md-8">
+            <div id="single_room_feat">
+                {% ifequal Category "Single Room" %}
+                <ul>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-104"></i></span>
+                            <div class="tooltip-content">King size bed</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-118"></i></span>
+                            <div class="tooltip-content">Shower</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-116"></i></span>
+                            <div class="tooltip-content">Plasma TV</div>
+                        </div>
+                    </li>
+                </ul>
+                {% endifequal %}
+                {% ifequal Category "Double Room" %}
+                <ul>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-104"></i></span>
+                            <div class="tooltip-content">King size bed</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-118"></i></span>
+                            <div class="tooltip-content">Shower</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-116"></i></span>
+                            <div class="tooltip-content">Plasma TV</div>
+                        </div>
+                    </li>
+                </ul>
+                {% endifequal %}
+                {% ifequal Category "Suite Room" %}
+                <ul>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-104"></i></span>
+                            <div class="tooltip-content">King size bed</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-118"></i></span>
+                            <div class="tooltip-content">Shower</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-116"></i></span>
+                            <div class="tooltip-content">Plasma TV</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-106"></i></span>
+                            <div class="tooltip-content">Safe box</div>
+                        </div>
+                    </li>
+                </ul>
+                {% endifequal %}
+                {% ifequal Category "Double Room Luxury" %}
+                <ul>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-104"></i></span>
+                            <div class="tooltip-content">King size bed</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-111"></i></span>
+                            <div class="tooltip-content">Bathtub</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-116"></i></span>
+                            <div class="tooltip-content">Plasma TV</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_1_icon-15"></i></span>
+                            <div class="tooltip-content">Welcome bottle</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tooltip_styled tooltip-effect-4">
+                            <span class="tooltip-item"><i class="icon_set_2_icon-106"></i></span>
+                            <div class="tooltip-content">Safe box</div>
+                        </div>
+                    </li>
+                </ul>
+                {% endifequal %}
+            </div>
+            <div class="row">
+                <div class="col-md-10" >
+                    <hr>
+                    {% if booking_list %}
+                    {% for book in booking_list %}
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <figure><img src="{{ book.room.category.image.url }}" alt="" class="img-responsive" width="403px" height="217px"></figure>
+                        </div>
+                        <div class="col-md-4 room_list_desc">
+                        <h2 class="room_list_desc ">{{book.room.name}}</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <small style="color: #ed5434;">Status: {{ book.status }}</small><br>
+                                <small>{{book.room.category.name}}</small><BR>
+                                <small>{{ book.Fee }} $</small><br>
+                                <small>Check in : {{book.arival_date}}</small>
+                                <br>
+                                <small>Check out : {{book.departure_date}}</small>
+                                <br>
+                            </div>
+                            {% ifequal book.status "PENDING" %}
+                            <div class="col-md-4" style=" right: 0%;margin-top: 2%">
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4"><span >Cancel </span></button>
+                                </form>
+                            </div>
+                            {% endifequal %}
+                            {% ifequal book.status "CONFIRM" %}
+                            <div class="col-md-4" style=" right: 0%;margin-top: 2%">
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4"><span >Cancel </span></button>
+                                </form>
+                            </div>
+                            {% endifequal %}
+                            {% ifequal book.status "RETURNED" %}
+                            <div class="col-md-4" style=" right: 0%;margin-top: 2%">
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+                            </div>
+                            {% endifequal %}
+                            {% ifequal book.status "OCCUPIED" %}
+                            <div class="col-md-4" style=" right: 0%;margin-top: 2%">
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+                            </div>
+                            {% endifequal %}
+                            {% ifequal book.status "CANCEL" %}
+                            <div class="col-md-4" style=" right: 0%;margin-top: 2%">
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+                            </div>
+                            {% endifequal %}
+                        </div>
+
+                    </div><!-- End review strip -->
+                    {% endfor %}
+                    {% else %}
+                        <h3 class="text-center">You have not made a reservation at the hotel</h3>
+                    <a href="{% url 'hotel:Category' %}" class="btn btn-danger" ><small>Booking Now</small></a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>Policies</h3>
+                </div>
+                <div class="col-md-9">
+                    <ul id="policies">
+                        <li><i class="icon_set_1_icon-83"></i><h5>Check-in and check-out.</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-54"></i><h5>Cancellation</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-47"></i><h5>Smoking</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-35"></i><h5>Payments</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-13"></i><h5>Disable</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div><!-- End col -->
+        <div class="col-md-4" id="sidebar">
+            <div class="theiaStickySidebar">
+                <div class="box_style_1">
+                    <div id="message-booking"></div>
+                    <h3 class="text-left" style="color: red;">To deposit and confirm the booking, please transfer money the following account number</h3>
+                    <hr>
+                    <label >Account Holder</label>
+                    <input type="text" value="Account Holder" class="form-control" readonly style="outline-color: aqua;">
+                    <label >Bank </label>
+                    <input type="text" value="Bank" class="form-control" readonly style="outline-color: aqua;">
+                    <label > Number Account </label>
+                    <input type="text" value="Number Account" class="form-control" readonly style="outline-color: aqua;">
+                    <hr>
+                    <div href="#0" class=" btn_outline"> or Contact us</div>
+                    <a href="tel://yourNumber" id="phone_2"><i class="icon_set_1_icon-91"></i>Your Number</a>
+
+                </div><!-- End box_style -->
+            </div><!-- End theiaStickySidebar -->
+        </div><!-- End col -->
+
+    </div><!-- End row -->
+
+
+</div><!-- End container -->
+
+
+<div id="dtBox"></div><!-- End datepicker -->
+
+
+<!-- Modal Review -->
+<div class="modal fade" id="myReview" tabindex="-1" role="dialog" aria-labelledby="myReviewLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myReviewLabel" style="font-weight:500;">Write your review</h4>
+            </div>
+            <div class="modal-body">
+                <div id="message-review">
+                </div>
+                <form method="post" action="assets/review.php" name="review" id="review">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input name="name_review" id="name_review" type="text" placeholder="Your name"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input name="lastname_review" id="lastname_review" type="text"
+                                       placeholder="Your last name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input name="email_review" id="email_review" type="email" placeholder="Your email"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="form-control" name="room_type_review" id="room_type_review">
+                                    <option value="">Select room type</option>
+                                    <option value="Single room">Single Room</option>
+                                    <option value="Double Room">Double Room</option>
+                                    <option value="King double room">King Double Room</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End row -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Position</label>
+                                <select class="form-control" name="position_review" id="position_review">
+                                    <option value="">Please review</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Sufficient">Sufficient</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Superb">Super</option>
+                                    <option value="Not rated">I don't know</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Comfort</label>
+                                <select class="form-control" name="comfort_review" id="comfort_review">
+                                    <option value="">Please review</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Sufficient">Sufficient</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Superb">Super</option>
+                                    <option value="Not rated">I don't know</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Price</label>
+                                <select class="form-control" name="price_review" id="price_review">
+                                    <option value="">Please review</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Sufficient">Sufficient</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Superb">Super</option>
+                                    <option value="Not rated">I don't know</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Quality</label>
+                                <select class="form-control" name="quality_review" id="quality_review">
+                                    <option value="">Please review</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Sufficient">Sufficient</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Superb">Super</option>
+                                    <option value="Not rated">I don't know</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End row -->
+                    <div class="form-group">
+                        <textarea name="review_text" id="review_text" class="form-control" style="height:100px"
+                                  placeholder="Write your review"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="verify_review" class="form-control" placeholder="Are you human? 3 + 1 =">
+                    </div>
+                    <input type="submit" value="Submit" class="btn_1" id="submit-review">
+                </form>
+            </div>
+        </div>
+    </div>
+</div><!-- End Modal Review -->
+
+{% endblock %}
+{% block scripts %}
+<!-- SPECIFIC SCRIPTS -->
+<script>
+    function addBooking(){
+    listRoom = document.getElementsByName("room");
+    data = document.getElementById('data');
+    var str="";
+    for(var i=0; i< listRoom.length; i++){
+        if(listRoom[i].checked == true){
+            str = str+ " " +listRoom[i].id;
+        }
+    }
+    data.setAttribute("value",str);
+}
+</script>
+
+<script>
+
+  $('.carousel_in').owlCarousel({
+    center: true,
+    items:1,
+    loop:true,
+	 autoplay:true,
+	 navText: [ '', '' ],
+	addClassActive: true,
+    margin:5,
+    responsive:{
+        600:{
+            items:1
+        },
+		 1000:{
+            items:2,
+			nav:true,
+        }
+    }
+});
+
+
+
+
+</script>
+<script src="{% static 'js/theia-sticky-sidebar.js' %}"></script>
+<script>
+    jQuery('#sidebar').theiaStickySidebar({
+      additionalMarginTop: 80
+    });
+
+
+</script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/bootsrap_datepicker_func.js' %}"></script>
+{% endblock %}

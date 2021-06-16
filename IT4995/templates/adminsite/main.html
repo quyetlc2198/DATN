@@ -1,0 +1,267 @@
+{% extends 'adminsite/base.html' %}
+{% load static %}
+
+<head>
+    {% block head %}
+{#        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>#}
+{#        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>#}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script>
+        var randomColorGenerator = function () {
+            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+        };
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'left'
+            },
+            title: {
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        window.onload = function () {
+            var ctx = document.getElementById("gender-chart");
+                {% regroup booking_lst|dictsort:"status" by status as status_list %}
+                lineChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for status in status_list %}'{{ status.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for status in status_list %}'{{ status.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for status in status_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+            var ctx1 = document.getElementById("booking-chart");
+                {% regroup booking_lst|dictsort:"room.name" by room as room_list %}
+                lineChart1 = new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for room in room_list %}'{{ room.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for room in room_list %}'{{ room.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for room in room_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+            var ctx2 = document.getElementById("category-chart");
+                {% regroup booking_lst|dictsort:"room.category.name" by room.category as category_list %}
+                lineChart1 = new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for cate in category_list %}'{{ cate.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for cate in category_list %}'{{ cate.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for cate in category_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room'
+                        }]
+                    }, options: options
+                });
+        }
+    </script>
+    {% endblock %}
+</head>
+
+<body>
+{% block body %}
+{% block sub_body %}
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-warning card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">weekend</i>
+                </div>
+                <p class="card-category">Bookings</p>
+                <h3 class="card-title">{{ booking }}</h3>
+                                </div>
+            <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">date_range</i>
+                                        <a href="{% url 'adminsite:admin_site_booking' %}">Get More Space...</a>
+                                    </div>
+                                </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-header card-header-rose card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="material-icons">equalizer</i>
+                                    </div>
+                                    <p class="card-category">Website Visits</p>
+                                    <h3 class="card-title">75.521</h3>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">local_offer</i> Tracked from Google Analytics
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+                                <div class="card-header card-header-success card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="material-icons">store</i>
+                                    </div>
+                                    <p class="card-category">Rooms</p>
+                                    <h3 class="card-title">{{ room}}</h3>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">date_range</i>
+                                        <a href="{% url 'adminsite:admin_site_room' %}">All Room</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="card card-stats">
+                                <div class="card-header card-header-info card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="fa fa-twitter"></i>
+                                    </div>
+                                    <p class="card-category">Comments</p>
+                                    <h3 class="card-title">+{{comment}}</h3>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">update</i> Just Updated
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+</div>
+<div class="row">
+        <div class="col-sm-4">
+            <canvas id="gender-chart" style="width: 90px !important; color: #fff; "></canvas>
+            <h5 style="text-align: center; ">Status Booking</h5>
+        </div>
+         <div class="col-sm-4">
+            <canvas id="booking-chart" style="width: 90px !important; color: #fff; "></canvas>
+             <h5 style="text-align: center; ">Room Booking</h5>
+        </div>
+        <div class="col-sm-4">
+            <canvas id="category-chart" style="width: 90px !important; color: #fff; "></canvas>
+            <h5 style="text-align: center; ">Category Booking</h5>
+        </div>
+
+    </div>
+{% endblock%}
+{% endblock %}
+</body>
+
+{#<div class="row">#}
+{#                        <div class="col-md-12">#}
+{#                            <div class="card ">#}
+{#                                <div class="card-header card-header-success card-header-icon">#}
+{#                                    <div class="card-icon">#}
+{#                                        <i class="material-icons"></i>#}
+{#                                    </div>#}
+{#                                    <h4 class="card-title">Global Sales by Top Locations</h4>#}
+{#                                </div>#}
+{#                                <div class="card-body ">#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-md-6">#}
+{#                                            <div class="table-responsive table-sales">#}
+{#                                                <table class="table">#}
+{#                                                    <tbody>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/US.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>USA</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            2.920#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            53.23%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/DE.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>Germany</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            1.300#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            20.43%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/AU.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>Australia</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            760#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            10.35%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/GB.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>United Kingdom</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            690#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            7.87%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/RO.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>Romania</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            600#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            5.94%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td>#}
+{#                                                            <div class="flag">#}
+{#                                                                <img src="{% static 'assets/img/flags/BR.png' %}" </div>#}
+{#                                                        </td>#}
+{#                                                        <td>Brasil</td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            550#}
+{#                                                        </td>#}
+{#                                                        <td class="text-right">#}
+{#                                                            4.34%#}
+{#                                                        </td>#}
+{#                                                    </tr>#}
+{#                                                    </tbody>#}
+{#                                                </table>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        <div class="col-md-6 ml-auto mr-auto">#}
+{#                                            <div id="worldMap" style="height: 300px;"></div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}

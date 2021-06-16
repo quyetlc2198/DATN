@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} My Room List {% endblock %}
+{% block sub %} Room List {% endblock %}
+{% block body %}
+<h1 class="main_title_in">My Room List</h1>
+<div class="container add_bottom_60">
+    <div class="row">
+            <div class="row" style="padding-top: 15px;padding-bottom: 15px;text-align: center">
+                <div class="col-md-1">Room</div>
+                <div class="col-md-2">Category</div>
+                <div class="col-md-1">Fee</div>
+                <div class="col-md-2">Checkin</div>
+                <div class="col-md-2">Checkout</div>
+                <div class="col-md-2">Status</div>
+                <div class="col-md-2">Action</div>
+                <br>
+            </div>
+            {% if booking_list %}
+                {% for book in booking_list %}
+                    <div class="row" style="padding-top: 15px;padding-bottom: 15px;text-align: center; border-top: 1px solid #00a5bb; font-style: inherit">
+                        <div class="col-md-1"><strong>{{book.room.name}}</strong></div>
+                        <div class="col-md-2"><strong>{{book.room.category.name}}</strong></div>
+                        <div class="col-md-1"><strong>{{ book.Fee }} $</strong></div>
+                        <div class="col-md-2"><strong>{{book.arival_date}}</strong></div>
+                        <div class="col-md-2"><strong>{{book.departure_date}}</strong></div>
+                        <div class="col-md-2" style="color: red"><strong>{{ book.status }}</strong></div>
+                        <div class="col-md-2" style="text-align: center;">
+                            {% ifequal book.status "PENDING" %}
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4"><span >Cancel </span></button>
+                                </form>
+
+                            {% endifequal %}
+                            {% ifequal book.status "CONFIRM" %}
+
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4"><span >Cancel </span></button>
+                                </form>
+
+                            {% endifequal %}
+                            {% ifequal book.status "RETURNED" %}
+
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+
+                            {% endifequal %}
+                            {% ifequal book.status "OCCUPIED" %}
+
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+
+                            {% endifequal %}
+                            {% ifequal book.status "CANCEL" %}
+                                <form action="{% url 'customer:cancel' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" style="margin-left:1%;" name="cancel_booking" value="{{ book.id}}" onclick="alert(' Are You Sure ?')" class="btn btn-danger mr-4" disabled><span >Cancel </span></button>
+                                </form>
+                            {% endifequal %}
+                        </div>
+                        <br>
+                    </div>
+                    {% endfor %}
+            {% else %}
+                <h3 class="text-center">You have not made a reservation at the hotel</h3>
+                <a href="{% url 'hotel:Category' %}" class="btn btn-danger" ><small>Booking Now</small></a>
+            {% endif %}
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-8">
+                <div class="col-md-3">
+                    <h3>Policies</h3>
+                </div>
+                <div class="col-md-9">
+                    <ul id="policies">
+                        <li><i class="icon_set_1_icon-83"></i><h5>Check-in and check-out.</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-54"></i><h5>Cancellation</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-47"></i><h5>Smoking</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-35"></i><h5>Payments</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                        <li><i class="icon_set_1_icon-13"></i><h5>Disable</h5>
+                            <p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes
+                                molestie. Sed ad debet scaevola, ne mel lorem legendos. Unum etiam cum te, an elit
+                                assueverit vix, falli aliquam complectitur ex ius.</p>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+        <div class="col-md-4" id="sidebar">
+            <div class="theiaStickySidebar">
+                <div class="box_style_1">
+                    <div id="message-booking"></div>
+                    <h4 class="text-left" style="color: red;">To deposit and confirm the booking, please transfer money the following account number</h4>
+                    <hr>
+                    <label >Account Holder</label>
+                    <input type="text" value="Account Holder" class="form-control" readonly style="outline-color: aqua;">
+                    <label >Bank </label>
+                    <input type="text" value="Bank" class="form-control" readonly style="outline-color: aqua;">
+                    <label > Number Account </label>
+                    <input type="text" value="Number Account" class="form-control" readonly style="outline-color: aqua;">
+                    <hr>
+                    <div href="#0" class=" btn_outline"> or Contact us</div>
+                    <a href="tel://yourNumber" id="phone_2"><i class="icon_set_1_icon-91"></i>Your Number</a>
+
+                </div><!-- End box_style -->
+            </div><!-- End theiaStickySidebar -->
+        </div><!-- End col -->
+    </div>
+
+
+</div><!-- End container -->
+
+
+<div id="dtBox"></div><!-- End datepicker -->
+
+
+{% endblock %}
+{% block scripts %}
+<!-- SPECIFIC SCRIPTS -->
+<script>
+    function addBooking(){
+    listRoom = document.getElementsByName("room");
+    data = document.getElementById('data');
+    var str="";
+    for(var i=0; i< listRoom.length; i++){
+        if(listRoom[i].checked == true){
+            str = str+ " " +listRoom[i].id;
+        }
+    }
+    data.setAttribute("value",str);
+}
+</script>
+
+<script>
+
+  $('.carousel_in').owlCarousel({
+    center: true,
+    items:1,
+    loop:true,
+	 autoplay:true,
+	 navText: [ '', '' ],
+	addClassActive: true,
+    margin:5,
+    responsive:{
+        600:{
+            items:1
+        },
+		 1000:{
+            items:2,
+			nav:true,
+        }
+    }
+});
+
+
+
+
+</script>
+<script src="{% static 'js/theia-sticky-sidebar.js' %}"></script>
+<script>
+    jQuery('#sidebar').theiaStickySidebar({
+      additionalMarginTop: 80
+    });
+
+
+</script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/bootsrap_datepicker_func.js' %}"></script>
+{% endblock %}

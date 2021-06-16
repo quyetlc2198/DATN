@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<body>
+
+{% block body %}
+
+{% block sub_body %}
+<div class="container margin_60_35">
+    <h1 class="main_title"><em></em>Welcome to Recom <span>Hotel and Bed&amp;Breakfast</span></h1>
+    <p class="lead styled">
+        Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes molestie. Sed ad debet
+        scaevola, ne mel lorem legendos. Unum etiam cum te, an elit assueverit vix, falli aliquam complectitur ex ius.
+    </p>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="mosaic_container">
+                <img src="{% static 'img/mosaic_1.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                    class="caption_2">Nice Outdoor</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="col-xs-12">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_2.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Large Bedroom</span>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_3.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Modern Bathroom</span>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_4.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Wellness</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- End row -->
+</div><!-- End container -->
+
+{% endblock %}
+
+    
+
+{% for category in categories_lst %}
+<div class="container_styled_1">
+    <div class="container margin_60">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <figure class="room_pic"><a href="#"><img src="{{ category.image.url }}" alt=""
+                                                          class="img-responsive"></a><span class="wow zoomIn"
+                                                                                           data-wow-delay="0.2s" style="width:35%;"><sup>$</sup>{{category.price_randian}}<small>Per night</small></span>
+                </figure>
+            </div>
+            <div class="col-md-4 col-md-offset-1">
+                <div class="room_desc_home">
+                    <h3>{{category.name}}</h3>
+                    <p>
+                        {{category.description}}
+                    </p>
+                    <ul>
+                        <li>
+                            <div class="tooltip_styled tooltip-effect-4">
+                                <span class="tooltip-item"><i class="icon_set_2_icon-104"></i></span>
+                                <div class="tooltip-content">
+                                    King size bed
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="tooltip_styled tooltip-effect-4">
+                                <span class="tooltip-item"><i class="icon_set_2_icon-118"></i></span>
+                                <div class="tooltip-content">
+                                    Shower
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="tooltip_styled tooltip-effect-4">
+                                <span class="tooltip-item"><i class="icon_set_2_icon-116"></i></span>
+                                <div class="tooltip-content">
+                                    Plasma TV
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="{{ category.get_absolute_url }}" class="btn_1_outline">Read more</a>
+                </div><!-- End room_desc_home -->
+            </div>
+        </div><!-- End row -->
+    </div><!-- End container -->
+</div><!-- End container_styled_1 -->
+
+{% endfor %}
+<section class="promo_full">
+    <div class="promo_full_wp">
+        <div>
+            <h3>What Clients say<span>Id tale utinam ius, an mei omnium recusabo iracundia.</span></h3>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="carousel_testimonials">
+                            {% for c in comments %}
+                            <div>
+                                <div class="box_overlay">
+                                    <div class="pic">
+                                        <figure><img src="{% static 'img/testimonial_1.jpg' %}" alt=""
+                                                     class="img-circle"></figure>
+                                        <h4>{{c.user.first_name}} {{c.user.last_name}}<small>{{c.create_date}}</small></h4>
+                                    </div>
+                                    <div class="comment">
+                                        {{ c.comment }}
+                                         </div>
+                                </div><!-- End box_overlay -->
+                            </div>
+                            {% endfor %}
+                        </div><!-- End carousel_testimonials -->
+                    </div><!-- End col-md-8 -->
+                </div><!-- End row -->
+            </div><!-- End container -->
+        </div><!-- End promo_full_wp -->
+    </div><!-- End promo_full -->
+</section><!-- End section -->
+
+{%endblock%}
+
+<!-- SPECIFIC SCRIPTS -->
+{% block scripts %}
+<script>
+  $('.carousel_in').owlCarousel({
+    center: true,
+    items:1,
+    loop:true,
+	 autoplay:true,
+	 navText: [ '', '' ],
+	addClassActive: true,
+    margin:-1,
+    responsive:{
+        600:{
+            items:1
+        },
+		 1000:{
+            items:2,
+			nav:true,
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

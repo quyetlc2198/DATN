@@ -1,0 +1,65 @@
+{% extends 'adminsite/base.html' %}
+{% load static %}
+
+<body>
+{% block body %}
+{% block sub_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                      <i class="material-icons">assignment</i>
+                    </div>
+                    <h4 class="card-title ">Room Table</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead class=" text-primary">
+                          <th>
+                            ID
+                          </th>
+                          <th>
+                            Name
+                          </th>
+                          <th>
+                            Category
+                          </th>
+                          <th>
+                            Price
+                          </th>
+                            <th>
+                            Status
+                          </th>
+                        </thead>
+                        <tbody style="color: #ed5434;">
+                        {% for room in rooms %}
+                          <tr>
+                            <td>
+                              {{ room.id }}
+                            </td>
+                            <td>
+                                {{ room.name }}
+                            </td>
+                            <td>
+                              {{ room.category}}
+                            </td>
+                              <td>
+                                {{ room.price }}
+                            </td>
+                              <td>
+                                {{ room.status }}
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+        </div>
+{% endblock%}
+{% endblock %}
+</body>

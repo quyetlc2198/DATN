@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block subheader_home %}
+    <div id="subheader_home" style="height: 230px">
+    <div id="sub_content">
+                <div id="book_container">
+                    <form method="post" action="{%  url 'hotel:avail_room' %}" id="check_avail_home" autocomplete="off">
+                        {% csrf_token %}
+                        <input type="hidden" name="data" id="data">
+                        <div id="group_1">
+                            <div id="container_1">
+                                <label>Arrival date</label>
+                                    <input class="date-pick form-control" type="text" id="check_in" name="check_in"
+                                           placeholder="Check in" data-date-format="M d D" readonly>
+                                    <span class="input-icon"><i class="icon-calendar-7"></i></span>
+                            </div>
+                            <div id="container_2">
+                                <label>Departure date</label>
+                                    <input class="date-pick form-control" type="text" id="check_out" name="check_out"
+                                           placeholder="Check out" data-date-format="M d D" readonly>
+                                    <span class="input-icon"><i class="icon-calendar-7"></i></span>
+                            </div>
+                        </div><!-- End group_1 -->
+                        <div id="group_2">
+                            <div id="container_3">
+                                <label>Adults</label>
+                                <div class="qty-buttons">
+                                    <input type="button" value="-" class="qtyminus" name="adults">
+                                    <input type="text" name="adults" id="adults" value="" class="qty form-control" placeholder="0">
+                                    <input type="button" value="+" class="qtyplus" name="adults">
+                                </div>
+                            </div>
+                            <div id="container_4">
+                                <label>Children</label>
+                                <div class="qty-buttons">
+                                    <input type="button" value="-" class="qtyminus" name="children">
+                                    <input type="text" name="children" id="children" value="" class="qty form-control" placeholder="0">
+                                    <input type="button" value="+" class="qtyplus" name="children">
+                                </div>
+                            </div>
+                        </div><!-- End group_2 -->
+
+                        <div id="container_7">
+                            <input type="submit" value="Check availability" class="btn_1" id="submit-booking">
+                        </div>
+                    </form>
+                </div><!-- End book_container -->
+            </div><!-- End sub_content -->
+    </div>
+{% endblock %}
+
+{% block body %}
+{% block sub_body %}
+<div class="container margin_60_35">
+    <h1 class="main_title"><em></em>Welcome to Recom <span>Hotel and Bed&amp;Breakfast</span></h1>
+    <p class="lead styled">
+        Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes molestie. Sed ad debet
+        scaevola, ne mel lorem legendos. Unum etiam cum te, an elit assueverit vix, falli aliquam complectitur ex ius.
+    </p>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="mosaic_container">
+                <img src="{% static 'img/mosaic_1.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                    class="caption_2">Nice Outdoor</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="col-xs-12">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_2.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Large Bedroom</span>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_3.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Modern Bathroom</span>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="mosaic_container">
+                    <img src="{% static 'img/mosaic_4.jpg' %}" alt="" class="img-responsive add_bottom_30"><span
+                        class="caption_2">Wellness</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- End row -->
+</div><!-- End container -->
+{% endblock %}
+
+
+
+{% for category in categories_lst %}
+<div class="container_styled_1">
+    <div class="container margin_60">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <figure class="room_pic"><img src="{{ category.image.url }}" alt=""
+                                                          class="img-responsive"><span class="wow zoomIn"
+                                                                                           data-wow-delay="0.2s" style="width:35%;"><sup>$</sup>{{category.price_randian}}<small>Per night</small></span>
+                </figure>
+            </div>
+            <div class="col-md-4 col-md-offset-1">
+                <div class="room_desc_home">
+                    <h3>{{category.name}}</h3>
+                    <p>
+                        {{category.description_home}}
+                    </p>
+                    <ul style="display: flex; width:100%;">
+                                        {% for s in category.service_list.all %}
+                                        <li >
+                                            <div class="tooltip_styled tooltip-effect-4">
+                                                <span class="tooltip-item"><i class="{{s.description}}"></i></span>
+                                	        <div class="tooltip-content">{{ s.name }}</div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                    <a href="{{ category.get_absolute_url }}" class="btn_1_outline">Read more</a>
+                </div><!-- End room_desc_home -->
+            </div>
+        </div><!-- End row -->
+    </div><!-- End container -->
+</div><!-- End container_styled_1 -->
+
+{% endfor %}
+<section class="promo_full">
+    <div class="promo_full_wp">
+        <div>
+            <h3>What Clients say<span>Id tale utinam ius, an mei omnium recusabo iracundia.</span></h3>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="carousel_testimonials">
+                            {% for c in comments %}
+                            <div>
+                                <div class="box_overlay">
+                                    <div class="pic">
+                                        <figure><img src="{% static 'img/testimonial_1.jpg' %}" alt=""
+                                                     class="img-circle"></figure>
+                                        <h4>{{c.user.first_name}} {{c.user.last_name}}<small>{{c.create_date}}</small></h4>
+                                    </div>
+                                    <div class="comment">
+                                        {{ c.comment }}
+                                         </div>
+                                </div><!-- End box_overlay -->
+                            </div>
+                            {% endfor %}
+                        </div><!-- End carousel_testimonials -->
+                    </div><!-- End col-md-8 -->
+                </div><!-- End row -->
+            </div><!-- End container -->
+        </div><!-- End promo_full_wp -->
+    </div><!-- End promo_full -->
+</section><!-- End section -->
+
+{%endblock%}
+
+<!-- SPECIFIC SCRIPTS -->
+{% block scripts %}
+<script>
+  $('.carousel_in').owlCarousel({
+    center: true,
+    items:1,
+    loop:true,
+	 autoplay:true,
+	 navText: [ '', '' ],
+	addClassActive: true,
+    margin:-1,
+    responsive:{
+        600:{
+            items:1
+        },
+		 1000:{
+            items:2,
+			nav:true,
+        }
+    }
+});
+
+</script>
+
+</script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/bootsrap_datepicker_func.js' %}"></script>
+
+</script>
+
+{% endblock %}

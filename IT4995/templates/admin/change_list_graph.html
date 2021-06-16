@@ -1,0 +1,81 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% block extrahead %}
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <style>
+     body{
+         background-color: #000;
+         font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+     }
+     h1{
+         font-size: 20px;
+         color: #fff;
+     }
+     hr{
+         border-top: none;
+     }
+     td, th {
+        font-size: 13px;
+        line-height: 16px;
+        border-bottom: 1px solid var(--hairline-color);
+        vertical-align: top;
+        padding: 8px;
+     }
+     select{
+         color: #fff;
+     }
+    </style>
+    <script>
+        var randomColorGenerator = function () {
+            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+        };
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'left'
+            },
+            title: {
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        window.onload = function () {
+            var ctx = document.getElementById("gender-chart");
+                {% regroup cl.queryset|dictsort:"category.name" by category as category_list %}
+                lineChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for category in category_list %}'{{ category.grouper }}',{% endfor %}],
+                        datasets: [{
+                            data: [{% for category in category_list %}'{{ category.list|length }}',{% endfor %}],
+                            backgroundColor: [{% for category in category_list %}randomColorGenerator(),{% endfor %}],
+                            label: 'Category Room',
+                            borderWidth: 1,
+                        }]
+                    },
+                    options: options
+                });
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    <hr>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5" style="border: 1px solid #417690">
+            <canvas id="gender-chart" style="width: 90px !important; color: #fff;align-content: center "></canvas>
+            <h5 style="color: #FFFFFF; text-align: center;">Rooms</h5>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <hr style="margin-bottom: 40px">
+    {{ block.super }}
+{% endblock %}

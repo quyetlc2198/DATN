@@ -1,0 +1,77 @@
+{% extends 'adminsite/base.html' %}
+{% load static %}
+
+<body>
+{% block body %}
+{% block sub_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                      <i class="material-icons">assignment</i>
+                    </div>
+                    <h4 class="card-title ">Booking Table</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead class=" text-primary">
+                          <th>
+                            ID
+                          </th>
+                          <th>
+                            Username
+                          </th>
+                          <th>
+                            Room
+                          </th>
+                          <th>
+                            Check In
+                          </th>
+                            <th>
+                            Check Out
+                          </th>
+                        <th>
+                            Adults
+                          </th>
+                        <th>
+                            Children
+                          </th>
+                        </thead>
+                        <tbody style="color: #ed5434;">
+                        {% for book in books %}
+                          <tr>
+                            <td>
+                              {{ book.id }}
+                            </td>
+                            <td>
+                                {{ book.user }}
+                            </td>
+                            <td>
+                              {{ book.room}}
+                            </td>
+                              <td>
+                                {{ book.arival_date }}
+                            </td>
+                            <td>
+                                {{ book.departure_date }}
+                            </td>
+                            <td>
+                                {{ book.number_adults }}
+                            </td>
+                            <td>
+                                {{ book.number_children }}
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+        </div>
+{% endblock%}
+{% endblock %}
+</body>

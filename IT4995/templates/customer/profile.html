@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+
+{% block sub %} PROFILE {% endblock %}
+<br/>
+<br/>
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center">PROFILE</h2>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Full Name: </b>
+        </div>
+        <div class="col-md-6" style="text-transform: capitalize;">
+            {{data.user.first_name}} {{data.user.last_name}}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Email Id: </b>
+        </div>
+        <div class="col-md-6" style="text-transform: capitalize;">
+            {{data.user.username}}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Contact: </b>
+        </div>
+        <div class="col-md-6" style="text-transform: capitalize;">
+            {{data.contact}}
+        </div>
+    </div>
+    <hr>
+    <a href="{% url 'customer:change_password' %}" class="btn btn-primary mt-5"> Change Password</a>
+
+</div>
+<br/>
+<br/>
+{% endblock %}

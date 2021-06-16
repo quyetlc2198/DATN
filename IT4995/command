@@ -1,0 +1,9 @@
+heroku login
+heroku contaier:login
+docker tag 0a9011a4ac88 quyetlc12/it4995:v11
+docker push quyetlc12/it4995:v10
+
+
+docker tag a5350ed33dee registry.heroku.com/sapahotel/web:latest
+docker push registry.heroku.com/sapahotel/web
+heroku container:release web --app sapahotel

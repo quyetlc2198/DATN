@@ -1,0 +1,62 @@
+{% extends 'adminsite/base.html' %}
+{% load static %}
+
+<body>
+{% block body %}
+{% block sub_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                      <i class="material-icons">assignment</i>
+                    </div>
+                    <h4 class="card-title ">Category Table</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead class=" text-primary">
+                          <th>
+                            ID
+                          </th>
+                          <th>
+                            Name
+                          </th>
+                          <th>
+                            Price
+                          </th>
+                          <th>Service</th>
+                        </thead>
+                        <tbody>
+                        {% for cate in categories %}
+                          <tr style="color: #ed5434;">
+                            <td>
+                              {{ cate.id }}
+                            </td>
+                            <td>
+                                {{ cate.name }}
+                            </td>
+                            <td>
+                              {{ cate.price_randian}} $/night
+                            </td>
+                            <td>
+                              <ul>
+                                {% for s in cate.service_list.all %}
+                                <li><small>{{s.name}}</small></li>
+                              {% endfor %}
+                              </ul>
+
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+        </div>
+{% endblock%}
+{% endblock %}
+</body>
