@@ -8,7 +8,7 @@
 - Docker, docker-compose
 ## Runs
 *       git clone https://github.com/quyetlc2198/DATN.git
-*	cd DATN
+*       cd DATN
 *       cd it4995
 *       docker-compose up
 
