@@ -7,13 +7,13 @@
 ## Requirement
 - Docker, docker-compose
 ## Runs
-* git clone https://github.com/quyetlc2198/DATN.git
-*      cd it4995
-*     docker-compose up
+*       git clone https://github.com/quyetlc2198/DATN.git
+*       cd it4995
+*       docker-compose up
 
 ## Link sản phẩm demo
 http://sapahotel.herokuapp.com/
 * Tài khoản admin:
-* username: admin@gmail.com
-* password: 123
+username: admin@gmail.com
+password: 123
         
