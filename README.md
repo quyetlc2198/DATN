@@ -1,11 +1,12 @@
 # DATN
-## Đồ án tốt nghiệp cử nhân
+## Đồ án tốt nghiệp cử nhân-IT4995
 ### MSSV: 20177021
 **@Author:** Nguyen Duc Quyet
 
 ## Requirement
 - Docker, docker-compose
 ## Runs
+* Khởi động docker
 *       git clone https://github.com/quyetlc2198/DATN.git
 *       cd DATN
 *       cd it4995
