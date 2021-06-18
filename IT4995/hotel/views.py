@@ -9,12 +9,15 @@ from customer.views import *
 from .models import *
 
 class HomePage(View):
-    def get(self, request, *args,**kwargs):
-        user = authenticate(username='admin@gmail.com', password='123')
+    def create_super_user(username, password):
+        user = authenticate(username=username, password=password)
         if user is not None:
             pass
         else:
             user = User.objects.create_superuser('admin@gmail.com', 'admin@gmail.com', '123')
+
+    def get(self, request, *args,**kwargs):
+        HomePage.create_super_user('admin@gmail.com','123')
         # lấy toàn bộ danh sách các loại phòng
         categories_lst = Categories.objects.all()
         comment_lst = Comments.objects.all()
@@ -23,6 +26,8 @@ class HomePage(View):
             'comment_lst': comment_lst,
         }
         return render(request, 'hotel/index.html', context=context)
+
+    
 
 def Category(request):
     categories_lst = Categories.objects.all()
