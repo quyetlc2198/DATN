@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.auth import authenticate
 # Create your views here.
 from django.views.generic.base import View
 from datetime import datetime
@@ -10,6 +10,11 @@ from .models import *
 
 class HomePage(View):
     def get(self, request, *args,**kwargs):
+        user = authenticate(username='admin@gmail.com', password='123')
+        if user is not None:
+            pass
+        else:
+            user = User.objects.create_superuser('admin@gmail.com', 'admin@gmail.com', '123')
         # lấy toàn bộ danh sách các loại phòng
         categories_lst = Categories.objects.all()
         comment_lst = Comments.objects.all()
