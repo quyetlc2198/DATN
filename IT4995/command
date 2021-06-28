@@ -1,9 +1,10 @@
+docker-compose up
+
 heroku login
 heroku contaier:login
-docker tag 0a9011a4ac88 quyetlc12/it4995:v11
-docker push quyetlc12/it4995:v10
 
+get id of container
 
-docker tag a5350ed33dee registry.heroku.com/sapahotel/web:latest
-docker push registry.heroku.com/sapahotel/web
-heroku container:release web --app sapahotel
+docker tag id_container registry.heroku.com/<appName>/web:latest
+docker push registry.heroku.com/<appName>/web
+heroku container:release web --app <appName>
